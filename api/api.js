@@ -25,7 +25,7 @@ app.get("/api/pens/:id", (req, res) => {
   const foundPen = pens.find((pen) => pen.id === parseInt(req.params.id));
 
   if (foundPen) {
-    res.json({ data: foundPen });
+    res.json({ data: [foundPen] });
   } else {
     res.sendStatus(404);
   }
@@ -50,21 +50,21 @@ app.post("/api/pens", (req, res) => {
   }
 });
 
-app.patch("api/pens/:id", (req, res) => {
+app.patch("/api/pens/:id", (req, res) => {
   const penIdx = pens.findIndex((pen) => pen.id == req.params.id);
 
   if (penIdx !== -1) {
     if (Object.keys(req.body).length !== 0) {
       const d = new Date();
       const updatedPen = {
-        id: pens[foundPenIdx].id,
-        title: req.body.title || pens[foundPenIdx].title,
-        content: req.body.content || pens[foundPenIdx].content,
-        author: req.body.author || pens[foundPenIdx].author,
+        id: pens[penIdx].id,
+        title: req.body.title || pens[penIdx].title,
+        content: req.body.content || pens[penIdx].content,
+        author: req.body.author || pens[penIdx].author,
         date: d.toLocaleString(),
-        category: req.body.category || pens[foundPenIdx].category,
+        category: req.body.category || pens[penIdx].category,
       };
-      pens[foundPenIdx] = updatedPen;
+      pens[penIdx] = updatedPen;
       res.status(200).json(updatedPen);
     } else {
       res.status(400).json({ error: "Missing parameters" });

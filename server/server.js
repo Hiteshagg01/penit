@@ -39,10 +39,49 @@ app.get("/", async (req, res) => {
 app.get("/write", (req, res) => {
   res.render("form.ejs");
 });
-
-app.post("/search", (req, res) => {
-  console.log(req.body);
+app.post("/write", async (req, res) => {
+  try {
+    await axios.post(`${API_URL}/pens`, req.body);
+  } catch (error) {
+    console.error(`Failed ${error}`);
+  }
   res.redirect("/");
+});
+
+app.get("/edit/:id", async (req, res) => {
+  try {
+    const response = await axios.get(`${API_URL}/pens/${req.params.id}`);
+    res.render("form.ejs", { pen: response.data.data[0] });
+  } catch (error) {
+    res.render("home.ejs", { error: error });
+  }
+});
+
+app.post("/edit/:id", async (req, res) => {
+  try {
+    await axios.patch(`${API_URL}/pens/${req.params.id}`, req.body);
+    res.redirect("/");
+  } catch (error) {
+    res.render("home.ejs", { error: error });
+  }
+});
+
+app.get("/delete/:id", async (req, res) => {
+  try {
+    await axios.delete(`${API_URL}/pens/${req.params.id}`);
+    res.redirect("/");
+  } catch (error) {
+    res.render("home.ejs", { error: error });
+  }
+});
+
+app.post("/search", async (req, res) => {
+  try {
+    const response = await axios.get(`${API_URL}/pens/${req.body.search}`);
+    res.render("home.ejs", { pens: response.data.data });
+  } catch (error) {
+    res.render("home.ejs", { error: error });
+  }
 });
 
 try {
