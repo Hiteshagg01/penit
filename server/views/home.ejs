@@ -1,0 +1,39 @@
+<%- include("partials/header.ejs") %>
+
+<div class="filter">
+  <!-- <small>filter</small> -->
+</div>
+
+<section class="pens">
+  <% if (locals.pens) { pens.forEach(pen => { %>
+  <article class="pen">
+    <small> - </small>
+    <small class="author"><%= pen.author %></small>
+    <small> • </small>
+    <small class="date"><%= pen.date %></small>
+    <br />
+    <span class="category"><%= pen.category %></span>
+    <h3 class="title"><%= pen.title %></h3>
+
+    <img src="https://picsum.photos/800/450" alt="lorem picsum" class="image" />
+
+    <p class="content"><%= pen.content %></p>
+
+    <button>Edit</button>
+    <button>Delete</button>
+  </article>
+
+  <hr />
+
+  <% })} else if (locals.error) { %>
+
+  <h2><%= error %></h2>
+
+  <% } else { %>
+
+  <h2>Something went wrong</h2>
+
+  <% } %>
+</section>
+
+<%- include("partials/footer.ejs") %>
